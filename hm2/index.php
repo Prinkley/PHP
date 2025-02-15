@@ -121,6 +121,7 @@
                     <label class="form__check" for="response_email">E-mail</label>
                     <input type="checkbox" placeholder="E-mail" id="response_email" name="response[]" value="e-mail">
                 </div>
+                <input type="submit" value="Отправить">
             </form>
         </div>
     </main>
