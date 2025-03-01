@@ -13,9 +13,7 @@
             $number2 = intval($_GET ['number2']);
             $sum = $number1 + $number2;
             echo "<p>Сумма чисел: $sum</p>";
-        } else {
-            echo "<p>Числа не получены.</p>";
-        }
+        } 
     ?>
 </body>
 </html>

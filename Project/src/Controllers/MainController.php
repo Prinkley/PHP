@@ -8,6 +8,6 @@ class MainController{
     }
 
     public function main(){
-        echo "Главная страница!";
+        include dirname(__DIR__).'//templates/main/main.php';
     }
 }
