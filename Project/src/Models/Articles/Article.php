@@ -1,40 +1,57 @@
 <?php
-
 namespace src\Models\Articles;
+
+use src\Models\ActiveRecordEntity;
 use src\Models\Users\User;
 
-class Article{
-    private $title;
-    private $text;
-    private $author;
+class Article extends ActiveRecordEntity
+{
+    protected $name;
+    protected $text;
+    protected $author_id;
 
-    public function __construct(string $title, string $text, User $author)
+
+    public function getName(): string 
     {
-        $this->title = $title;
-        $this->text = $text;
-        $this->author = $author;
+        return $this->name;
     }
 
-    public function setTitle(string $title){
-        $this->title = $title;
-    }
-    public function setText(string $text){
-        $this->text = $text;
-    }
-    public function setAuthor(User $author){
-        $this->author = $author;
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-    public function getText(): string
+    public function getText(): string 
     {
         return $this->text;
     }
-    public function getAuthor(): User
+
+    public function getAuthorId(): int 
     {
-        return $this->author;
+        return $this->author_id;
+    }
+    
+    public function getAuthor(): ?User 
+    {
+        if (!$this->author_id) {
+            return null; 
+        }
+        return User::getById($this->author_id); //тут загружаем объект User через User::getById()
+    }
+    
+   
+    public function setName(string $name): void 
+    {
+        $this->name = $name;
+    }
+
+    public function setText(string $text): void 
+    {
+        $this->text = $text;
+    }
+
+    public function setAuthorId(int $authorId): void 
+    {
+        $this->author_id = $authorId;
+    }
+
+    public static function getTableName(): string // здесь мы указываем, с какой таблицей работает модель 
+    {
+        return 'articles';
     }
 }

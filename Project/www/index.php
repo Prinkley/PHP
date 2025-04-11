@@ -1,32 +1,31 @@
 <?php
 
-    spl_autoload_register(function(string $className){
-        require_once dirname(__DIR__).'\\'.$className.'.php';
-    });
+spl_autoload_register(function(string $className) { // автозагрузка классов 
+    $filePath = str_replace('\\', DIRECTORY_SEPARATOR, $className) . '.php'; // приписывает в конец ".php"
+    $fullPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . $filePath;
 
-    
-    $findRoute = false;
-    
-    $route = $_GET['route'] ?? '';
-    $patterns = require 'route.php';
-    foreach ($patterns as $pattern=>$controllerAndAction){
-        preg_match($pattern, $route, $matches);
-        if (!empty($matches)){
-            $findRoute = true;
-            unset($matches[0]);
-            $nameController = $controllerAndAction[0];
-            $actionName = $controllerAndAction[1];
-            $controller = new $nameController;
-            $controller->$actionName(...$matches);
-            break;
-        }
+    if (file_exists($fullPath)) {
+        require_once $fullPath;
+    } else {
+        throw new Exception("{$fullPath}");
     }
-    
-    if (!$findRoute) echo "Page not found (404)";
+});
 
 
-    $user = new src\Models\Users\User('Ivan');
-    $article = new src\Models\Articles\Article('title', 'text', $user);
+$findRoute = false;
+$route = $_GET['route'] ?? ''; // здесь получаем текущий маршрут нн
 
-    // var_dump($user);
-    // var_dump($article);
+$patterns = require 'route.php'; //подключение шаблонов 
+foreach ($patterns as $pattern => $controllerAndAction) { //перебор шаблонов
+    preg_match($pattern, $route, $matches); // проверка на совпадение регулярки с URL
+    if (!empty($matches)) { // если есть совпадение...
+        $findRoute = true;
+        unset($matches[0]); // полное совпадение
+        $controllerClass = $controllerAndAction[0]; 
+        $action = $controllerAndAction[1];  
+        $controller = new $controllerClass(); // создание объекта 
+        $controller->$action(...$matches); // для show(int $id) бдует передаваться только id
+        break;
+    }
+}
+if (!$findRoute) echo "Page not found (404)"; // обрабатывает ошибки маршрутизации 
