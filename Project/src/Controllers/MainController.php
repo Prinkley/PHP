@@ -17,8 +17,4 @@ class MainController {
     public function sayBye(string $name){
         $this->view->renderHtml('main/bye', ['name' => $name]);
     }
-
-    // public function sayBye(string $name) {
-    //     $this->view->renderHtml('main/bye', ['name' => 'Anastasia']); // Было 'maxim'
-    // }
 }
